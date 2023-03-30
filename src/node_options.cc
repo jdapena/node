@@ -450,6 +450,10 @@ EnvironmentOptionsParser::EnvironmentOptionsParser() {
             "the quality of its hash keys",
             V8Option(),
             kAllowedInEnvvar);
+  AddOption("--profile-heap-snapshot",
+            "Dump time spent with heap snapshot",
+            V8Option(),
+            kAllowedInEnvvar);
   AddOption("--http-parser", "", NoOp{}, kAllowedInEnvvar);
   AddOption("--insecure-http-parser",
             "use an insecure HTTP parser that accepts invalid HTTP headers",
