@@ -2750,6 +2750,9 @@ class V8_NODISCARD NullContextForSnapshotScope {
 }  // namespace
 
 bool HeapSnapshotGenerator::GenerateSnapshot() {
+  v8::base::ElapsedTimer timer;
+  timer.Start();
+
   Isolate* isolate = Isolate::FromHeap(heap_);
   base::Optional<HandleScope> handle_scope(base::in_place, isolate);
   v8_heap_explorer_.CollectGlobalObjectsTags();
@@ -2784,6 +2787,12 @@ bool HeapSnapshotGenerator::GenerateSnapshot() {
   snapshot_->RememberLastJSObjectId();
 
   progress_counter_ = progress_total_;
+
+  if (i::v8_flags.profile_heap_snapshot) {
+    base::OS::PrintError("[Heap snapshot took %0.3f ms]\n",
+                         timer.Elapsed().InMillisecondsF());
+  }
+  timer.Stop();
   if (!ProgressReport(true)) return false;
   return true;
 }
@@ -2827,6 +2836,8 @@ bool HeapSnapshotGenerator::FillReferences() {
 const int HeapSnapshotJSONSerializer::kNodeFieldsCount = 7;
 
 void HeapSnapshotJSONSerializer::Serialize(v8::OutputStream* stream) {
+  v8::base::ElapsedTimer timer;
+  timer.Start();
   if (AllocationTracker* allocation_tracker =
       snapshot_->profiler()->allocation_tracker()) {
     allocation_tracker->PrepareForSerialization();
@@ -2836,6 +2847,12 @@ void HeapSnapshotJSONSerializer::Serialize(v8::OutputStream* stream) {
   SerializeImpl();
   delete writer_;
   writer_ = nullptr;
+
+  if (i::v8_flags.profile_heap_snapshot) {
+    base::OS::PrintError("[Serialization of heap snapshot took %0.3f ms]\n",
+                         timer.Elapsed().InMillisecondsF());
+  }
+  timer.Stop();
 }
 
 
