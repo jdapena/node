@@ -53,6 +53,8 @@ class V8_EXPORT_PRIVATE StringsStorage {
   // Returns true if the strings table is empty.
   bool empty() const { return names_.occupancy() == 0; }
 
+  void Print();
+
  private:
   static bool StringsMatch(void* key1, void* key2);
   // Adds the string to storage and returns it, or if a matching string exists

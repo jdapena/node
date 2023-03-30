@@ -182,5 +182,23 @@ base::HashMap::Entry* StringsStorage::GetEntry(const char* str, int len) {
   return names_.LookupOrInsert(const_cast<char*>(str), hash);
 }
 
+void StringsStorage::Print() {
+  auto capacity = names_.capacity();
+  base::OS::PrintError("STRINGS STORAGE DUMP %d/%d START\n", names_.occupancy(), capacity);
+  base::HashMap::Entry* zero = names_.Zero();
+  for (base::HashMap::Entry* p = names_.Start(); p != nullptr;
+       p = names_.Next(p)) {
+    if (p->exists()) {
+      auto index = p - zero;
+      auto hash = p->hash;
+      auto proper_index = hash & (capacity - 1);
+
+      base::OS::PrintError("index=%x dist=%d hash=%x size=%d key=%s\n", index, index - proper_index, hash, reinterpret_cast<size_t>(p->value), reinterpret_cast<const char*>(p->key));
+    }
+    DeleteArray(reinterpret_cast<const char*>(p->key));
+  }
+  base::OS::PrintError("STRINGS STORAGE DUMP END\n");
+}
+
 }  // namespace internal
 }  // namespace v8

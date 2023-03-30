@@ -125,6 +125,7 @@ class TemplateHashMapImpl {
   // calling Next() is undefined.
   Entry* Start() const;
   Entry* Next(Entry* entry) const;
+  Entry* Zero() const;
 
   AllocationPolicy allocator() const { return impl_.allocator(); }
 
@@ -330,6 +331,13 @@ void TemplateHashMapImpl<Key, Value, MatchFun, AllocationPolicy>::Clear() {
     impl_.map_[i].clear();
   }
   impl_.occupancy_ = 0;
+}
+
+template <typename Key, typename Value, typename MatchFun,
+          class AllocationPolicy>
+typename TemplateHashMapImpl<Key, Value, MatchFun, AllocationPolicy>::Entry*
+TemplateHashMapImpl<Key, Value, MatchFun, AllocationPolicy>::Zero() const {
+  return impl_.map_;
 }
 
 template <typename Key, typename Value, typename MatchFun,

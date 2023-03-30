@@ -2923,6 +2923,8 @@ void HeapSnapshotJSONSerializer::Serialize(v8::OutputStream* stream) {
     allocation_tracker->PrepareForSerialization();
   }
   DCHECK_NULL(writer_);
+  if (v8_flags.heap_snapshot_dump_strings_storage)
+    snapshot_->profiler()->names()->Print();
   writer_ = new OutputStreamWriter(stream);
   SerializeImpl();
   delete writer_;

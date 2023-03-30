@@ -445,6 +445,11 @@ EnvironmentOptionsParser::EnvironmentOptionsParser() {
             "heap snapshots will be generated.",
             &EnvironmentOptions::heap_snapshot_near_heap_limit,
             kAllowedInEnvvar);
+  AddOption("--heap-snapshot-dump-strings-storage",
+            "Dump heap snapshot strings storage to understand "
+            "the quality of its hash keys",
+            V8Option(),
+            kAllowedInEnvvar);
   AddOption("--http-parser", "", NoOp{}, kAllowedInEnvvar);
   AddOption("--insecure-http-parser",
             "use an insecure HTTP parser that accepts invalid HTTP headers",
