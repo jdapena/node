@@ -770,6 +770,10 @@ PerIsolateOptionsParser::PerIsolateOptionsParser(
             "disable runtime allocation of executable memory",
             V8Option{},
             kAllowedInEnvvar);
+  AddOption("--profile-heap-snapshot",
+            "profile time spent capturing heap snapshots",
+            V8Option{},
+            kAllowedInEnvvar);
   AddOption("--report-uncaught-exception",
             "generate diagnostic report on uncaught exceptions",
             &PerIsolateOptions::report_uncaught_exception,
